@@ -5,9 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyImage = document.querySelector('.empty-image');
     const progressBar = document.getElementById('progress');
     const numbers = document.getElementById('numbers');
+    const statContainer = document.getElementById('stat-container');
+
+    function toggleStatContainer() {
+        const totalTasks = taskList.children.length;
+        const completedTasks = taskList.querySelectorAll('.task-checkbox:checked').length;
+        if (totalTasks === 0 || (totalTasks > 0 && completedTasks === totalTasks)) {
+            statContainer.style.display = 'none';
+        } else {
+            statContainer.style.display = 'flex';
+        }
+    }
 
     function toggleEmptyState() {
         emptyImage.style.display = taskList.children.length === 0 ? 'block' : 'none';
+        toggleStatContainer();
     }
 
     const updateprogress = (checkcompletion = true) => {
@@ -16,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         progressBar.style.width = totalTasks ? `${(completedTasks / totalTasks) * 100}%` : '0%';
         numbers.textContent = `${completedTasks} / ${totalTasks}`;
+
+        toggleStatContainer();
 
         if (checkcompletion && totalTasks > 0 && completedTasks === totalTasks) {
             Confetti();
